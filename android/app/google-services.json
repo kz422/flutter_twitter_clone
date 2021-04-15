@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "459409148901",
+    "project_id": "fluttershare-e4cbb",
+    "storage_bucket": "fluttershare-e4cbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459409148901:android:2409520d9b3ae3c2c2bd0c",
+        "android_client_info": {
+          "package_name": "pino.twitterclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459409148901-k9nceittu2ebjik7mef919ejhq0rvku3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pino.twitterclone",
+            "certificate_hash": "46276008d7eccd0a92ef5c6323636c33ee51ee7c"
+          }
+        },
+        {
+          "client_id": "459409148901-m8blp5vbmckjinaflmh1lfno66lvdn51.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa9He6nozDjQxst7BNQZuxUj8Oopprsis"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "459409148901-m8blp5vbmckjinaflmh1lfno66lvdn51.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
