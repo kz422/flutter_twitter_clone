@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:twitterclone/screens/FeedScreen.dart';
-import 'package:twitterclone/screens/WelcomeScreen.dart';
+import 'package:twitterclone/screens/WelcomeScreenCopy.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
             currentUserId: snapshot.data.uid,
           );
         } else {
-          return WelcomeScreen();
+          return WelcomeScreenCopy();
         }
       },
     );

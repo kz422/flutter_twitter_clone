@@ -39,6 +39,7 @@ dependencies:
   flutter_image_compress: ^1.0.0
   uuid: ^3.0.4
   path_provider: ^2.0.0
+  flutter_signin_button: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +62,7 @@ flutter:
   - assets/post.png
   - assets/avatar.png
   - assets/logo.jpg
+  - assets/twitterlogo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:twitterclone/Services/auth_service.dart';
-import 'package:twitterclone/Widgets/RoundedButton.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key}) : super(key: key);
@@ -15,50 +14,95 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('Login'),
-          backgroundColor: Colors.blueGrey,
-        ),
-        body: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(hintText: 'Email'),
-                  onChanged: (value) {
-                    _email = value;
-                  },
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(hintText: 'PW'),
-                  onChanged: (value) {
-                    _pw = value;
-                  },
-                ),
-                SizedBox(
-                  height: 26,
-                ),
-                RoundedButton(
-                  btnText: 'Submit',
-                  onBtnPressed: () async {
-                    bool isValid = await AuthService.signIn(_email, _pw);
-                    if (isValid) {
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Colors.cyan[100], Colors.blue],
+      )),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/twitterlogo.png',
+                    height: 40,
+                  ),
+                  SizedBox(height: 30),
+                  Text(
+                    'メールアドレスとパスワードを入力してください',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 30),
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      hintStyle: TextStyle(color: Colors.white),
+                    ),
+                    onChanged: (value) {
+                      _email = value;
+                    },
+                  ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  TextField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      hintStyle: TextStyle(color: Colors.white),
+                    ),
+                    onChanged: (value) {
+                      _pw = value;
+                    },
+                  ),
+                  SizedBox(
+                    height: 26,
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 10)),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(color: Colors.white))),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.orange),
+                    ),
+                    child: Text(
+                      'ログイン',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      bool isValid = await AuthService.signIn(_email, _pw);
+                      if (isValid) {
+                        Navigator.pop(context);
+                      } else {
+                        print('oops');
+                      }
+                    },
+                  ),
+                  TextButton(
+                    onPressed: () {
                       Navigator.pop(context);
-                    } else {
-                      print('oops');
-                    }
-                  },
-                )
-              ],
+                    },
+                    child: Text(
+                      'キャンセル',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
