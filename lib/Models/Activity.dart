@@ -8,12 +8,12 @@ class Activity {
 
   Activity({this.id, this.fromUserId, this.timestamp, this.follow});
 
-  factory Activity.fromDoc(DocumentSnapshot doc) {
+  factory Activity.fromDoc(DocumentSnapshot documentSnapshot) {
     return Activity(
-      id: doc.id,
-      fromUserId: doc['fromUserId'],
-      timestamp: doc['timestamp'],
-      follow: doc['follow'],
+      id: documentSnapshot.id,
+      fromUserId: documentSnapshot['fromUserId'],
+      timestamp: documentSnapshot['timestamp'],
+      follow: documentSnapshot['follow'],
     );
   }
 }

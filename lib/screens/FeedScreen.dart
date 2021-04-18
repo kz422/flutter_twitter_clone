@@ -44,7 +44,7 @@ class _FeedScreenState extends State<FeedScreen> {
             },
           );
         },
-        activeColor: Colors.amber,
+        activeColor: Colors.blue,
         currentIndex: _selectedTab,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home)),

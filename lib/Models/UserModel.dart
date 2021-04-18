@@ -8,14 +8,13 @@ class UserModel {
   String bio;
   String coverImage;
 
-  UserModel({
-    this.id,
-    this.name,
-    this.profilePicture,
-    this.email,
-    this.bio,
-    this.coverImage,
-  });
+  UserModel(
+      {this.id,
+      this.name,
+      this.profilePicture,
+      this.email,
+      this.bio,
+      this.coverImage});
 
   factory UserModel.fromDoc(DocumentSnapshot doc) {
     return UserModel(

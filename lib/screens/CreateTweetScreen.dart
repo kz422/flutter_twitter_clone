@@ -11,8 +11,7 @@ import 'package:twitterclone/Widgets/RoundedButton.dart';
 class CreateTweetScreen extends StatefulWidget {
   final String currentUserId;
 
-  CreateTweetScreen({Key key, this.currentUserId}) : super(key: key);
-
+  const CreateTweetScreen({Key key, this.currentUserId}) : super(key: key);
   @override
   _CreateTweetScreenState createState() => _CreateTweetScreenState();
 }
@@ -20,10 +19,9 @@ class CreateTweetScreen extends StatefulWidget {
 class _CreateTweetScreenState extends State<CreateTweetScreen> {
   String _tweetText;
   File _pickedImage;
-
   bool _loading = false;
 
-  handleImageGallery() async {
+  handleImageFromGallery() async {
     try {
       File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
       if (imageFile != null) {
@@ -39,11 +37,16 @@ class _CreateTweetScreenState extends State<CreateTweetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.amber,
         centerTitle: true,
         title: Text(
-          'Post',
-          style: TextStyle(color: Colors.white, fontSize: 20),
+          'Tweet',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
         ),
       ),
       body: Padding(
@@ -52,9 +55,11 @@ class _CreateTweetScreenState extends State<CreateTweetScreen> {
           children: [
             SizedBox(height: 20),
             TextField(
-              maxLength: 300,
+              maxLength: 280,
               maxLines: 7,
-              decoration: InputDecoration(hintText: 'Tweet'),
+              decoration: InputDecoration(
+                hintText: 'Enter your Tweet',
+              ),
               onChanged: (value) {
                 _tweetText = value;
               },
@@ -67,29 +72,38 @@ class _CreateTweetScreenState extends State<CreateTweetScreen> {
                       Container(
                         height: 200,
                         decoration: BoxDecoration(
+                            color: Colors.amber,
                             image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: FileImage(_pickedImage),
-                        )),
+                              fit: BoxFit.cover,
+                              image: FileImage(_pickedImage),
+                            )),
                       ),
                       SizedBox(height: 20),
                     ],
                   ),
             GestureDetector(
-              onTap: handleImageGallery,
+              onTap: handleImageFromGallery,
               child: Container(
                 height: 70,
                 width: 70,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    border: Border.all(width: 2)),
-                child: Icon(Icons.camera_alt),
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.amber,
+                    width: 2,
+                  ),
+                ),
+                child: Icon(
+                  Icons.camera_alt,
+                  size: 50,
+                  color: Colors.amber,
+                ),
               ),
             ),
             SizedBox(height: 20),
             RoundedButton(
-              btnText: 'Sumit',
+              btnText: 'Tweet',
               onBtnPressed: () async {
                 setState(() {
                   _loading = true;

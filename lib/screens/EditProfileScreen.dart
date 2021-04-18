@@ -1,7 +1,6 @@
-// import 'dart:html';
-
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:twitterclone/Models/UserModel.dart';
@@ -21,63 +20,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String _bio;
   File _profileImage;
   File _coverImage;
-  String _imagePictureType;
+  String _imagePickedType;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
-  saveProfile() async {
-    _formKey.currentState.save();
-    if (_formKey.currentState.validate() && !_isLoading) {
-      setState(() {
-        _isLoading = true;
-      });
-      String profilePictureUrl = '';
-      String coverPictureUrl = '';
-      if (_profileImage == null) {
-        profilePictureUrl = widget.user.profilePicture;
-      } else {
-        profilePictureUrl = await StorageService.uploadCoverPicture(
-            widget.user.coverImage, _coverImage);
-      }
-      if (_coverImage == null) {
-        profilePictureUrl = widget.user.profilePicture;
-      } else {
-        profilePictureUrl = await StorageService.uploadProfilePicture(
-            widget.user.profilePicture, _profileImage);
-      }
-      UserModel user = UserModel(
-        id: widget.user.id,
-        name: widget.user.name,
-        profilePicture: profilePictureUrl,
-        bio: _bio,
-        coverImage: coverPictureUrl,
-      );
-
-      DatabaseServices.updateUserData(user);
-      Navigator.pop(context);
-    }
-  }
-
-  handleImageFromGallery() async {
-    try {
-      File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-      if (_imagePictureType == 'profile') {
-        setState(() {
-          _profileImage = imageFile;
-        });
-      } else if (_imagePictureType == 'cover') {
-        setState(() {
-          _coverImage = imageFile;
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   displayCoverImage() {
     if (_coverImage == null) {
-      if (widget.user.coverImage.isEmpty) {
+      if (widget.user.coverImage.isNotEmpty) {
         return NetworkImage(widget.user.coverImage);
       }
     } else {
@@ -97,6 +46,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+  saveProfile() async {
+    _formKey.currentState.save();
+    if (_formKey.currentState.validate() && !_isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+      String profilePictureUrl = '';
+      String coverPictureUrl = '';
+      if (_profileImage == null) {
+        profilePictureUrl = widget.user.profilePicture;
+      } else {
+        profilePictureUrl = await StorageService.uploadProfilePicture(
+            widget.user.profilePicture, _profileImage);
+      }
+      if (_coverImage == null) {
+        coverPictureUrl = widget.user.coverImage;
+      } else {
+        coverPictureUrl = await StorageService.uploadCoverPicture(
+            widget.user.coverImage, _coverImage);
+      }
+      UserModel user = UserModel(
+        id: widget.user.id,
+        name: _name,
+        profilePicture: profilePictureUrl,
+        bio: _bio,
+        coverImage: coverPictureUrl,
+      );
+
+      DatabaseServices.updateUserData(user);
+      Navigator.pop(context);
+    }
+  }
+
+  handleImageFromGallery() async {
+    try {
+      File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+      if (imageFile != null) {
+        if (_imagePickedType == 'profile') {
+          setState(() {
+            _profileImage = imageFile;
+          });
+        } else if (_imagePickedType == 'cover') {
+          setState(() {
+            _coverImage = imageFile;
+          });
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -113,7 +114,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              _imagePictureType = 'cover';
+              _imagePickedType = 'cover';
               handleImageFromGallery();
             },
             child: Stack(
@@ -121,13 +122,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Container(
                   height: 150,
                   decoration: BoxDecoration(
-                      color: Colors.cyan,
-                      image:
-                          _coverImage == null && widget.user.coverImage.isEmpty
-                              ? null
-                              : DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: displayCoverImage())),
+                    color: Colors.amber,
+                    image: _coverImage == null && widget.user.coverImage.isEmpty
+                        ? null
+                        : DecorationImage(
+                            fit: BoxFit.cover,
+                            image: displayCoverImage(),
+                          ),
+                  ),
                 ),
                 Container(
                   height: 150,
@@ -145,10 +147,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         'Change Cover Photo',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -166,7 +169,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        _imagePictureType = 'profile';
+                        _imagePickedType = 'profile';
                         handleImageFromGallery();
                       },
                       child: Stack(
@@ -191,13 +194,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   'Change Profile Photo',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
                               ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -215,9 +219,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           child: Text(
                             'Save',
                             style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -228,9 +233,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 30,
-                        ),
+                        SizedBox(height: 30),
                         TextFormField(
                           initialValue: _name,
                           decoration: InputDecoration(
@@ -238,31 +241,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             labelStyle: TextStyle(color: Colors.amber),
                           ),
                           validator: (input) => input.trim().length < 2
-                              ? 'Please enter valid name'
+                              ? 'please enter valid name'
                               : null,
                           onSaved: (value) {
                             _name = value;
                           },
                         ),
-                        SizedBox(
-                          height: 30,
-                        ),
+                        SizedBox(height: 30),
                         TextFormField(
                           initialValue: _bio,
                           decoration: InputDecoration(
                             labelText: 'Bio',
                             labelStyle: TextStyle(color: Colors.amber),
                           ),
-                          validator: (input) => input.trim().length < 2
-                              ? 'Please enter valid name'
-                              : null,
                           onSaved: (value) {
                             _bio = value;
                           },
                         ),
-                        SizedBox(
-                          height: 30,
-                        ),
+                        SizedBox(height: 30),
                         _isLoading
                             ? CircularProgressIndicator(
                                 valueColor:
@@ -270,7 +266,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               )
                             : SizedBox.shrink()
                       ],
-                    ))
+                    )),
               ],
             ),
           )

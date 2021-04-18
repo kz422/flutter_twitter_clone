@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitterclone/Constants/Constants.dart';
 import 'package:twitterclone/Models/Activity.dart';
 import 'package:twitterclone/Models/UserModel.dart';
 import 'package:twitterclone/Services/DatabaseServices.dart';
@@ -13,8 +14,6 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   List<Activity> _activities = [];
-
-  get usersRef => null;
 
   setupActivities() async {
     List<Activity> activities =
@@ -40,7 +39,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   leading: CircleAvatar(
                     radius: 20,
                     backgroundImage: user.profilePicture.isEmpty
-                        ? AssetImage('assets/placeholder.png')
+                        ? AssetImage('assets/avatar.png')
                         : NetworkImage(user.profilePicture),
                   ),
                   title: activity.follow == true
@@ -50,7 +49,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Divider(
-                    thickness: 1,
+                    color: Colors.blueGrey,
+                    thickness: .5,
                   ),
                 )
               ],
@@ -72,7 +72,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           centerTitle: true,
           elevation: 0.5,
           title: Text(
-            'Notifications',
+            '通知',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

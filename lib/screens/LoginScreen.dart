@@ -10,7 +10,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String _email;
-  String _pw;
+  String _password;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintStyle: TextStyle(color: Colors.white),
                     ),
                     onChanged: (value) {
-                      _pw = value;
+                      _password = value;
                     },
                   ),
                   SizedBox(
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () async {
-                      bool isValid = await AuthService.signIn(_email, _pw);
+                      bool isValid = await AuthService.login(_email, _password);
                       if (isValid) {
                         Navigator.pop(context);
                       } else {

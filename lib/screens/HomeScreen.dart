@@ -9,7 +9,7 @@ import 'package:twitterclone/screens/CreateTweetScreen.dart';
 class HomeScreen extends StatefulWidget {
   final String currentUserId;
 
-  HomeScreen({Key key, this.currentUserId}) : super(key: key);
+  const HomeScreen({Key key, this.currentUserId}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -31,11 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   showFollowingTweets(String currentUserId) {
-    List<Widget> followingTweetList = [];
+    List<Widget> followingTweetsList = [];
     for (Tweet tweet in _followingTweets) {
-      followingTweetList.add(
-        FutureBuilder(
-          future: userRef.doc(tweet.authorId).get(),
+      followingTweetsList.add(FutureBuilder(
+          future: usersRef.doc(tweet.authorId).get(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               UserModel author = UserModel.fromDoc(snapshot.data);
@@ -43,14 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
             } else {
               return SizedBox.shrink();
             }
-          },
-        ),
-      );
+          }));
     }
-    return followingTweetList;
+    return followingTweetsList;
   }
 
-  setUpFollowingTweets() async {
+  setupFollowingTweets() async {
     setState(() {
       _loading = true;
     });
@@ -67,40 +64,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    setUpFollowingTweets();
+    setupFollowingTweets();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
+          child: Image.asset('assets/post.png'),
           onPressed: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  fullscreenDialog: true,
-                  builder: (context) => CreateTweetScreen(
-                    currentUserId: widget.currentUserId,
-                  ),
-                ));
+                    builder: (context) => CreateTweetScreen(
+                          currentUserId: widget.currentUserId,
+                        )));
           },
-          child: Image.asset('assets/post.png'),
         ),
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: .5,
+          backgroundColor: Colors.blue,
+          elevation: 0.5,
           centerTitle: true,
           leading: Container(
-            height: 40,
+            height: 25,
+            // child: Image.asset('assets/twitterlogo.png'),
           ),
           title: Text(
-            'Home',
-            style: TextStyle(color: Colors.black26),
+            'ホーム',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         ),
         body: RefreshIndicator(
-          onRefresh: () => setUpFollowingTweets(),
+          onRefresh: () => setupFollowingTweets(),
           child: ListView(
             physics: BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -117,16 +116,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? [
                             SizedBox(height: 5),
                             Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 25),
-                                child: Text(
-                                  'There is no new Tweets',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                )),
+                              padding: EdgeInsets.symmetric(horizontal: 25),
+                              child: Text(
+                                'There is No New Tweets',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            )
                           ]
                         : showFollowingTweets(widget.currentUserId),
-                  )
+                  ),
                 ],
               )
             ],

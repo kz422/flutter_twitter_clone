@@ -8,9 +8,8 @@ class TweetContainer extends StatefulWidget {
   final UserModel author;
   final String currentUserId;
 
-  TweetContainer({Key key, this.tweet, this.author, this.currentUserId})
+  const TweetContainer({Key key, this.tweet, this.author, this.currentUserId})
       : super(key: key);
-
   @override
   _TweetContainerState createState() => _TweetContainerState();
 }
@@ -62,10 +61,11 @@ class _TweetContainerState extends State<TweetContainer> {
           Row(
             children: [
               CircleAvatar(
-                  radius: 20,
-                  backgroundImage: widget.author.profilePicture.isEmpty
-                      ? AssetImage('assets/avatar.png')
-                      : NetworkImage(widget.author.profilePicture)),
+                radius: 20,
+                backgroundImage: widget.author.profilePicture.isEmpty
+                    ? AssetImage('assets/avatar.png')
+                    : NetworkImage(widget.author.profilePicture),
+              ),
               SizedBox(width: 10),
               Text(
                 widget.author.name,
@@ -73,7 +73,7 @@ class _TweetContainerState extends State<TweetContainer> {
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
-              )
+              ),
             ],
           ),
           SizedBox(height: 15),
@@ -91,11 +91,12 @@ class _TweetContainerState extends State<TweetContainer> {
                     Container(
                       height: 250,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
                             image: NetworkImage(widget.tweet.image),
-                            fit: BoxFit.cover),
-                      ),
+                          )),
                     )
                   ],
                 ),
@@ -114,22 +115,8 @@ class _TweetContainerState extends State<TweetContainer> {
                   ),
                   Text(
                     _likesCount.toString() + ' Likes',
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.repeat),
-                    onPressed: () {},
                   ),
-                  Text(
-                    widget.tweet.retweets.toString() + ' RT',
-                  )
                 ],
-              ),
-              SizedBox(
-                width: 10,
               ),
               Text(
                 widget.tweet.timestamp.toDate().toString().substring(0, 19),

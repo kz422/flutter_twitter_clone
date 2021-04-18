@@ -1,4 +1,3 @@
-// import 'package:firebase/firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:twitterclone/Models/UserModel.dart';
@@ -7,8 +6,8 @@ import 'package:twitterclone/screens/ProfileScreen.dart';
 
 class SearchScreen extends StatefulWidget {
   final String currentUserId;
-  SearchScreen({Key key, this.currentUserId}) : super(key: key);
 
+  const SearchScreen({Key key, this.currentUserId}) : super(key: key);
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -49,17 +48,20 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        elevation: .5,
+        elevation: 0.5,
         title: TextField(
           controller: _searchController,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(vertical: 25),
-            hintText: 'Search...',
+            contentPadding: EdgeInsets.symmetric(vertical: 15),
+            hintText: 'Search Twitter...',
             hintStyle: TextStyle(color: Colors.white),
             border: InputBorder.none,
             prefixIcon: Icon(Icons.search, color: Colors.white),
             suffixIcon: IconButton(
-              icon: Icon(Icons.clear, color: Colors.white),
+              icon: Icon(
+                Icons.clear,
+                color: Colors.white,
+              ),
               onPressed: () {
                 clearSearch();
               },
@@ -67,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
             filled: true,
           ),
           onChanged: (input) {
-            if (input.isEmpty) {
+            if (input.isNotEmpty) {
               setState(() {
                 _users = DatabaseServices.searchUsers(input);
               });
@@ -82,13 +84,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 children: [
                   Icon(Icons.search, size: 200),
                   Text(
-                    'Search...',
+                    'Search Twitter...',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
-                  ),
+                  )
                 ],
               ),
             )
-          : FutureBuilder(
+          : FutureBuilder<QuerySnapshot>(
               future: _users,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (!snapshot.hasData) {
@@ -96,26 +98,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                if (snapshot.hasData) {
+                if (snapshot.data.docs.length == 0) {
                   return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.data.documents.length == 0) {
-                  return Center(
-                    child: Text('No users found'),
+                    child: Text('No users found!'),
                   );
                 }
                 return ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    UserModel user =
-                        UserModel.fromDoc(snapshot.data.documents[index]);
-                    return buildUserTile(user);
-                  },
-                );
-              },
-            ),
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      UserModel user =
+                          UserModel.fromDoc(snapshot.data.docs[index]);
+                      return buildUserTile(user);
+                    });
+              }),
     );
   }
 }

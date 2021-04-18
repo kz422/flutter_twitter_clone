@@ -1,5 +1,3 @@
-// import 'dart:html';
-
 import 'dart:io';
 // import 'package:firebase/firebase.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,7 +11,7 @@ class StorageService {
     String uniquePhotoId = Uuid().v4();
     File image = await compressImage(uniquePhotoId, imageFile);
 
-    if (url.isEmpty) {
+    if (url.isNotEmpty) {
       RegExp exp = RegExp(r'userProfile_(.*).jpg');
       uniquePhotoId = exp.firstMatch(url)[1];
     }
@@ -29,12 +27,12 @@ class StorageService {
     String uniquePhotoId = Uuid().v4();
     File image = await compressImage(uniquePhotoId, imageFile);
 
-    if (url.isEmpty) {
+    if (url.isNotEmpty) {
       RegExp exp = RegExp(r'userCover_(.*).jpg');
-      uniquePhotoId = exp.firstMatch(url)[0];
+      uniquePhotoId = exp.firstMatch(url)[1];
     }
     UploadTask uploadTask = storageRef
-        .child('images/users/CoverProfile_$uniquePhotoId.jpg')
+        .child('images/users/userCover_$uniquePhotoId.jpg')
         .putFile(image);
     TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
     String downloadUrl = await taskSnapshot.ref.getDownloadURL();

@@ -18,7 +18,7 @@ class DatabaseServices {
   }
 
   static void updateUserData(UserModel user) {
-    userRef.doc(user.id).update({
+    usersRef.doc(user.id).update({
       'name': user.name,
       'bio': user.bio,
       'profilePicture': user.profilePicture,
@@ -27,7 +27,7 @@ class DatabaseServices {
   }
 
   static Future<QuerySnapshot> searchUsers(String name) async {
-    Future<QuerySnapshot> users = userRef
+    Future<QuerySnapshot> users = usersRef
         .where('name', isGreaterThanOrEqualTo: name)
         .where('name', isLessThan: name + 'z')
         .get();
